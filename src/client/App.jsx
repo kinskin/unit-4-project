@@ -44,7 +44,6 @@ class App extends React.Component {
 
     allowDrop(event){
         event.preventDefault()
-        console.log("HELLOOO")
     }
 
 

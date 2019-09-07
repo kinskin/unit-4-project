@@ -67,7 +67,6 @@ module.exports = (dbPoolInstance) => {
     }
 
     let deleteTask = (data,callback)=>{
-        console.log('this is the data', data)
         let query = 'DELETE from tasks where taskid = $1'
         let values = [data]
         dbPoolInstance.query(query,values,(error,result)=>{
