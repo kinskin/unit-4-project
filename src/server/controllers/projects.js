@@ -96,10 +96,31 @@ module.exports = (db) => {
         })
     }
 
+    let deleteMember = (request,response)=>{
+        db.projects.deleteMemberTask(request.memberId,(error,result)=>{
+            if(error){
+                console.log(error)
+                console.log('error in deleting member task')
+            }
+            else{
+                db.projects.deleteMember(request.body.memberId,(error2,result2)=>{
+                    if(error2){
+                        console.log(error2)
+                        console.log('error in deleting member')
+                    }
+                    else{
+                        response.send({result: result,result2: result2})
+                    }
+                })
+            }
+        })
+    }
+
   return {
     getProjects: getProjects,
     getAll: getAll,
     deleteTask: deleteTask,
+    deleteMember: deleteMember,
     newMember:newMember,
     newTask: newTask
   };

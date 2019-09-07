@@ -21,20 +21,6 @@ class Project extends React.Component{
         }
     }
 
-    doneTask(id,projectId){
-
-        this.props.doneTask(id,projectId)
-        let url = '/delete/task'
-
-        fetch(url, {
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({id: id})
-        })
-        .then(res => res.json())
-        .then(res => {console.log(res)})
-    }
-
     projectDisplay(){
         let display = true
         this.props.projectDisplay(display)
@@ -116,6 +102,36 @@ class Project extends React.Component{
         }
     }
 
+    doneTask(taskid,projectId){
+
+        this.props.doneTask(taskid,projectId)
+        let url = '/delete/task'
+
+        // fetch(url, {
+        //     method: 'DELETE',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({id: id})
+        // })
+        // .then(res => res.json())
+        // .then(res => {console.log(res)})
+    }
+
+    removeMember(memberId,projectId){
+        console.log('this is the member id in project jsx: ', memberId)
+        this.props.removeMember(memberId,projectId)
+        let url = '/delete/member'
+        // fetch(url, {
+        //     method: 'DELETE',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({memberId: memberId})
+        // })
+        // .then(res => res.json())
+        // .then(res => {
+        //     console.log(res)
+        // })
+
+    }
+
     render(){
 
         let project = this.props.project
@@ -132,7 +148,7 @@ class Project extends React.Component{
                         <p>{project.description}</p>
                     </div>
                     <div className='card-footer'>
-                        <button onClick={(projectid)=>{this.showNameInput(project.projectid)}}className='btn btn-sm'>{this.state.addMember}</button>
+                        <button onClick={(projectid)=>{this.showNameInput(project.projectid)}} className='btn btn-sm'>{this.state.addMember}</button>
                     </div>
                 </div>
             )
@@ -158,11 +174,14 @@ class Project extends React.Component{
                 <div className='col d-flex flex-column'>
                     <div className='card'>
                         <div className='card-header d-inline'>
-                            <div className='row justify-content-around'>
-                                <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.taskShowInput(member.memberid, member.project_id)}}>{this.state.addTask}</button>
+                            <div>
                                 <h6>
                                     {member.member_name}
                                 </h6>
+                                <div className='row justify-content-around'>
+                                    <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.taskShowInput(member.memberid, member.project_id)}}>{this.state.addTask}</button>
+                                    <button onClick={(memberId,projectId)=>{this.removeMember(member.memberid,member.project_id)}}className='btn btn-sm'> Remove member </button>
+                                </div>
                             </div>
                         </div>
                         {mapTasks}

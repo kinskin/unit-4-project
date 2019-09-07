@@ -1,10 +1,8 @@
 CREATE TABLE IF NOT EXISTS tasks (
 	taskId SERIAL PRIMARY KEY,
 	task TEXT,
-	member_id INTEGER,
-	project_id INTEGER,
-	FOREIGN KEY (member_id) REFERENCES members (memberId),
-	FOREIGN KEY (project_id) REFERENCES projects (projectId)
+	member_id INTEGER REFERENCES members (memberId) ON DELETE CASCADE,
+	project_id INTEGER REFERENCES projects (projectId) ON DELETE CASCADE
 );
 
 Insert INTO tasks (task, member_id, project_id) values ('go wash toilet',1,1);

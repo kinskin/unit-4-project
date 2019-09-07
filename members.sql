@@ -1,8 +1,7 @@
 CREATE TABLE IF NOT EXISTS members (
 	memberId SERIAL PRIMARY KEY,
 	member_name TEXT,
-	project_id INTEGER,
-	FOREIGN KEY (project_id) REFERENCES projects (projectId)
+	project_id INTEGER REFERENCES projects (projectId) ON DELETE CASCADE
 );
 
 Insert INTO members (member_name, project_id) values ('asshikin', 1);

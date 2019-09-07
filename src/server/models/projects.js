@@ -97,6 +97,33 @@ module.exports = (dbPoolInstance) => {
         });
     };
 
+    let deleteMemberTask = (memberId,callback)=>{
+        let query = 'DELETE from tasks where member_id = $1'
+        let values = [memberId]
+        dbPoolInstance.query(query,values,(error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null,queryResult.rows)
+            }
+        })
+    }
+
+    let deleteMember = (memberId,callback)=>{
+        let query = 'DELETE from members where memberid = $1'
+        let values = [memberId]
+
+        dbPoolInstance.query(query,values,(error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null,queryResult.rows)
+            }
+        })
+    }
+
     let newTask = (task, memberId, projectId, callback)=>{
 
         let query = "INSERT INTO tasks (task, member_id, project_id) VALUES ($1, $2, $3) RETURNING *";
@@ -116,6 +143,8 @@ module.exports = (dbPoolInstance) => {
     newMember: newMember,
     newTask: newTask,
     deleteTask: deleteTask,
+    deleteMember: deleteMember,
+    deleteMemberTask: deleteMemberTask,
     getProjects: getProjects,
     getMembers: getMembers,
     getTasks: getTasks,

@@ -75,10 +75,27 @@ class App extends React.Component {
         this.showProject(projectId)
     }
 
+    removeMember(memberId,projectId){
+        let projects = this.state.projects
+        let memberIndex = projects.members.findIndex(member=>member.memberid == memberId)
+        projects.members.splice(memberIndex,1)
+        for(let i = projects.tasks.length-1 ; i >= 0; i--){
+            if(projects.tasks[i].member_id == memberId){
+                projects.tasks.splice(i,1)
+            }
+        }
+        console.log(projects.tasks)
+        this.setState({projects: projects})
+        console.log('this is the project id in remove member: ', projectId)
+        this.showProject(projectId)
+    }
+
 
     doneTask(id,projectId){
         let projects = this.state.projects
-        projects.tasks.splice((task=> task.project_id == id),1)
+        let taskIndex = projects.tasks.findIndex(task=>task.taskid == id)
+        projects.tasks.splice(taskIndex,1)
+        console.log(projects.tasks)
         this.setState({projects: projects})
         this.showProject(projectId)
     }
@@ -90,10 +107,12 @@ class App extends React.Component {
 
 
     showProject(id){
+        console.log('this is the in show project in app jsx id: ', id)
+        console.log('rendering after deleting members')
         let projects = this.state.projects
-        let filterProjects = projects.projects.filter((project=> project.projectid == id))
-        let filterMembers = projects.members.filter((member=> member.project_id == id))
-        let filterTasks = projects.tasks.filter((task=> task.project_id == id))
+        let filterProjects = projects.projects.filter(project=> project.projectid == id)
+        let filterMembers = projects.members.filter(member=> member.project_id == id)
+        let filterTasks = projects.tasks.filter(task=> task.project_id == id)
         this.setState({showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
     }
 
@@ -113,7 +132,7 @@ class App extends React.Component {
             showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
         }
         else{
-            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}}/>
+            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}}/>
         }
 
 
