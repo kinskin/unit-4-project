@@ -47,11 +47,23 @@ class App extends React.Component {
         console.log("HELLOOO")
     }
 
+
+    newTask(task){
+        let projectId = task.result[0].project_id
+        let data = {
+            taskid: task.result[0].taskid,
+            task: task.result[0].task,
+            member_id: task.result[0].member_id,
+            project_id: task.result[0].project_id
+        }
+        let projects = this.state.projects
+        projects.tasks.push(data)
+        this.setState({projects: projects})
+        this.showProject(projectId)
+    }
+
     newMember(member){
-        console.log(member.result)
-        console.log('this is the member: ', member.result[0].memberid)
-        console.log('this is the member: ', member.result[0].member_name)
-        console.log('this is the member: ', member.result[0].project_id)
+        let projectId = member.result[0].project_id
         let data = {
             memberid: member.result[0].memberid,
             member_name: member.result[0].member_name,
@@ -59,16 +71,15 @@ class App extends React.Component {
         }
         let projects = this.state.projects
         projects.members.push(data)
-        this.setState({showProject: [], showMembers:[], showTasks:[], projects: projects})
+        this.setState({projects: projects})
+        this.showProject(projectId)
     }
 
 
     doneTask(id,projectId){
-        console.log('this is the task id: ', id)
-        console.log('this is the project id: ', projectId)
         let projects = this.state.projects
         projects.tasks.splice((task=> task.project_id == id),1)
-        this.setState({showProject: [], showMembers:[], showTasks:[], projects: projects})
+        this.setState({projects: projects})
         this.showProject(projectId)
     }
 
@@ -76,6 +87,7 @@ class App extends React.Component {
         console.log(display)
         this.setState({showProject: [], showMembers:[], showTasks:[], displayProject: display })
     }
+
 
     showProject(id){
         let projects = this.state.projects
@@ -101,7 +113,7 @@ class App extends React.Component {
             showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
         }
         else{
-            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}}/>
+            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}}/>
         }
 
 

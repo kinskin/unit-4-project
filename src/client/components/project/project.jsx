@@ -11,8 +11,13 @@ class Project extends React.Component{
             message: 'SELECT PROJECT',
             addMember: 'Add team members',
             display: 'none',
+            addTask: 'Add task',
+            taskDisplay: 'none',
             projectId: '',
-            memberName: ''
+            memberName: '',
+            memberId: '',
+            taskProjectId: '',
+            task: ''
         }
     }
 
@@ -36,9 +41,7 @@ class Project extends React.Component{
     }
 
     showNameInput(projectId){
-        console.log('this is the projectid: ', projectId)
         let display = this.state.display
-        let addMember = this.state.addMember
         if(display === 'none'){
             this.setState({display: '', addMember: 'Close', projectId: projectId})
         }
@@ -50,7 +53,7 @@ class Project extends React.Component{
     nameInput(event){
         if(event.keyCode === 13){
             console.log(event.target.value)
-            this.setState({memberName: event.target.value})
+            this.setState({memberName: event.target.value, display: 'none', addMember: 'Add team members'})
             this.addMember()
         }
         else{
@@ -61,7 +64,6 @@ class Project extends React.Component{
     addMember(){
         let memberName = this.state.memberName
         let projectId = this.state.projectId
-
         let url = '/new/member'
         fetch(url, {
             method: 'POST',
@@ -69,7 +71,49 @@ class Project extends React.Component{
             body: JSON.stringify({memberName: memberName, projectId: projectId})
         })
         .then(res => res.json())
-        .then(res => {this.props.addMember(res)})
+        .then(res => {
+            this.setState({memberName: ''})
+            this.props.addMember(res)
+
+        })
+    }
+
+    taskShowInput(memberId,projectId){
+        let taskDisplay = this.state.taskDisplay
+        if(taskDisplay === 'none'){
+            this.setState({taskDisplay: '', addTask: 'Close', memberId: memberId, taskProjectId: projectId})
+        }
+        else{
+            this.setState({taskDisplay: 'none', addTask: 'Add task', memberId: ''})
+        }
+    }
+
+    addTask(){
+        let task = this.state.task
+        let memberId = this.state.memberId
+        let taskProjectId = this.state.taskProjectId
+        let url = '/new/task'
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({task: task, memberId: memberId, taskProjectId: taskProjectId})
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)
+            this.setState({task: ''})
+            this.props.addTask(res)
+        })
+    }
+
+    taskInput(event){
+        if(event.keyCode === 13){
+            this.setState({task: event.target.value, display: 'none', addtask: 'Add task'})
+            this.addTask()
+        }
+        else{
+            this.setState({task: event.target.value})
+        }
     }
 
     render(){
@@ -113,12 +157,12 @@ class Project extends React.Component{
             return(
                 <div className='col d-flex flex-column'>
                     <div className='card'>
-                        <div className='card-header row'>
-                            <div className='col-4'>
-                                <button className='btn btn-sm'>Add task</button>
-                            </div>
-                            <div className='col-4'>
-                                {member.member_name}
+                        <div className='card-header d-inline'>
+                            <div className='row justify-content-around'>
+                                <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.taskShowInput(member.memberid, member.project_id)}}>{this.state.addTask}</button>
+                                <h6>
+                                    {member.member_name}
+                                </h6>
                             </div>
                         </div>
                         {mapTasks}
@@ -149,7 +193,13 @@ class Project extends React.Component{
                                 <div className='card-header'>
                                     <p>Add member</p>
                                 </div>
-                                <input onChange={(event)=>{this.nameInput(event)}} onKeyDown={(event)=>{this.nameInput(event)}}placeholder='Team member name'/>
+                                <input onChange={(event)=>{this.nameInput(event)}} onKeyDown={(event)=>{this.nameInput(event)}} placeholder='Team member name' value={this.state.memberName}/>
+                            </div>
+                            <div className='card my-3' style={{display: this.state.taskDisplay}}>
+                                <div className='card-header'>
+                                    <p>Add task</p>
+                                </div>
+                                <input onChange={(event)=>{this.taskInput(event)}} onKeyDown={(event)=>{this.taskInput(event)}} placeholder='Add your task' value={this.state.task}/>
                             </div>
                         </div>
                         <div className='col-9'>

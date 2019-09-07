@@ -82,10 +82,25 @@ module.exports = (db) => {
         })
     }
 
+    let newTask = (request,response)=>{
+        console.log(request.body.task)
+        console.log(request.body.memberId)
+        console.log(request.body.taskProjectId)
+        db.projects.newTask(request.body.task, request.body.memberId, request.body.taskProjectId,(error,result)=>{
+            if(error){
+                console.log('error in adding the new task')
+            }
+            else{
+                response.send({result: result})
+            }
+        })
+    }
+
   return {
     getProjects: getProjects,
     getAll: getAll,
     deleteTask: deleteTask,
-    newMember:newMember
+    newMember:newMember,
+    newTask: newTask
   };
 };

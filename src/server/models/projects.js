@@ -92,15 +92,29 @@ module.exports = (dbPoolInstance) => {
             }
             else{
                 // invoke callback function with results after query has executed
-
                 callback(null, queryResult.rows );
             }
         });
-
     };
+
+    let newTask = (task, memberId, projectId, callback)=>{
+
+        let query = "INSERT INTO tasks (task, member_id, project_id) VALUES ($1, $2, $3) RETURNING *";
+        let values = [task, memberId, projectId]
+
+        dbPoolInstance.query(query,values,(error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null,queryResult.rows)
+            }
+        })
+    }
 
   return {
     newMember: newMember,
+    newTask: newTask,
     deleteTask: deleteTask,
     getProjects: getProjects,
     getMembers: getMembers,
