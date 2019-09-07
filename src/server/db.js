@@ -1,5 +1,5 @@
 const pg = require('pg');
-const products = require('./models/products');
+const projects = require('./models/projects');
 const url = require('url');
 
 var configs;
@@ -20,7 +20,7 @@ if (process.env.DATABASE_URL) {
   configs = {
     user: 'mohammadasshikin',
     host: '127.0.0.1',
-    database: 'products',
+    database: 'projects',
     port: 5432
   };
 }
@@ -35,7 +35,7 @@ module.exports = {
   /*
    * ADD APP MODELS HERE
    */
-  products: products(pool),
+  projects: projects(pool),
 
   //make queries directly from here
   queryInterface: (text, params, callback) => {

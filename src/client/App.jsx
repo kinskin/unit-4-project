@@ -15,41 +15,11 @@ class App extends React.Component {
 
         this.state={
             value:'',
-            projects: [
-                {
-                    projectId: 1,
-                    projectName: 'project 1',
-                    projectDescription: 'Daily basic need',
-                    members:[{
-                            name: 'asshikin',
-                            tasks: ['clean toilet', 'go smoke']
-                    },
-                    {
-                        name: 'thea',
-                        tasks: ['wash dishes', 'go swimming']
-                    }],
-                    doneTask: []
-                },
-                {
-                    projectId: 2,
-                    projectName: 'project 2',
-                    projectDescription: 'TA basic need',
-                    members: [{
-                        name: 'khai',
-                        tasks: ['play with cats', 'go for 9 rounds']
-                    },
-                    {
-                        name: 'herda',
-                        tasks: ['put on make up', 'daydreaming']
-                    }],
-                    doneTask: []
-                }
-            ],
+            projects: [],
             showProject: [],
-            switchItemIndex: '',
-            switchWithIndex: '',
-            verifying: '',
-            showProjectId: ''
+            showMembers:[],
+            showTasks:[],
+            displayProject: true
         }
     }
 
@@ -77,50 +47,66 @@ class App extends React.Component {
         console.log("HELLOOO")
     }
 
+    newMember(member){
+        console.log(member.result)
+        console.log('this is the member: ', member.result[0].memberid)
+        console.log('this is the member: ', member.result[0].member_name)
+        console.log('this is the member: ', member.result[0].project_id)
+        let data = {
+            memberid: member.result[0].memberid,
+            member_name: member.result[0].member_name,
+            project_id: member.result[0].project_id
+        }
+        let projects = this.state.projects
+        projects.members.push(data)
+        this.setState({showProject: [], showMembers:[], showTasks:[], projects: projects})
+    }
+
+
+    doneTask(id,projectId){
+        console.log('this is the task id: ', id)
+        console.log('this is the project id: ', projectId)
+        let projects = this.state.projects
+        projects.tasks.splice((task=> task.project_id == id),1)
+        this.setState({showProject: [], showMembers:[], showTasks:[], projects: projects})
+        this.showProject(projectId)
+    }
+
+    projectDisplay(display){
+        console.log(display)
+        this.setState({showProject: [], showMembers:[], showTasks:[], displayProject: display })
+    }
+
     showProject(id){
         let projects = this.state.projects
-        let showProject = this.state.showProject
-        let projectIndex = projects.findIndex(project => project.projectId == id)
-        if(showProject.length !== 0){
-            showProject[0] = projects[projectIndex]
-            this.setState({showProject: showProject})
-        }
-        else{
-            showProject.push(projects[projectIndex])
-            this.setState({showProject: showProject})
-        }
+        let filterProjects = projects.projects.filter((project=> project.projectid == id))
+        let filterMembers = projects.members.filter((member=> member.project_id == id))
+        let filterTasks = projects.tasks.filter((task=> task.project_id == id))
+        this.setState({showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
     }
 
-    newMember(id,name){
-        let data = {
-            id: parseInt(id),
-            member: name,
-            tasks: []
-        }
-        let projectDetail = this.state.projectDetail
-        projectDetail.push(data)
-        this.setState({projectDetail: projectDetail}, ()=>{
-            console.log(this.state.projectDetail)
-        })
-    }
-
-
-    doneTask(id,name,index){
-        let projects = this.state.projects
-        let projectIndex = projects.findIndex(project=> project.projectId == id)
-        let doneTask = this.state.projects[projectIndex].doneTask
-        let memberTaskIndex = projects[projectIndex].members.findIndex(member=> member.name == name)
-        let tasks = this.state.projects[projectIndex].members[memberTaskIndex].tasks
-        let newDone = tasks.splice(index,1)
-        doneTask.push(newDone[0])
-        this.setState({doneTask: doneTask, tasks: tasks})
-
+    componentDidMount(){
+        let url = `http://localhost:3000/projects`
+        fetch(url)
+            .then(response =>  response.json())
+            .then(data => {
+                this.setState({projects: data})
+            })
     }
 
     render() {
+        let displayProject = this.state.displayProject
+        let showProject;
+        if(displayProject === true){
+            showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
+        }
+        else{
+            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}}/>
+        }
+
 
     return (
-        <div>
+        <div className='container-fluid'>
             <div className='header text-center'>
                 <div className='row'>
                     <div className='col-4'>
@@ -135,17 +121,9 @@ class App extends React.Component {
             <div className='text-center'>
                 <input onChange={(event)=>{this.changeHandler(event)}} onKeyDown={(event)=>{this.changeHandler(event)}} value={this.state.value}/>
             </div>
-            <div className='row'>
-                <div className='col-3 text-center'>
-                    <div className={styles.projects}>
-                        <Projects projects={this.state.projects} deleteProject={(id)=>{this.deleteProject(id)}}  onDragOver={(event)=>{this.allowDrop(event)}} showProject={(id)=>{this.showProject(id)}} addNewMember={(id,name)=>{this.newMember(id,name)}}/>
-                    </div>
-                </div>
-                <div className='col-6'>
-                    <Project showProject={this.state.showProject} doneTask={(id,name,index)=>{this.doneTask(id,name,index)}}/>
-                </div>
-                <div className='col-3'>
-                    <Done showProject={this.state.showProject}/>
+            <div className='text-center'>
+                <div className={styles.projects}>
+                    {showProject}
                 </div>
             </div>
         </div>

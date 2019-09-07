@@ -1,6 +1,7 @@
 module.exports = (app, db) => {
-  const products = require('./controllers/products')(db);
+  const projects = require('./controllers/projects')(db);
 
-  app.get('/products', products.getAll);
-  app.post('/newproduct', products.newProduct);
+  app.post('/new/member', projects.newMember)
+  app.get('/projects', projects.getProjects);
+  app.delete('/delete/task', projects.deleteTask);
 };

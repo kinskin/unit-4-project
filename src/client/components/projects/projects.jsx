@@ -2,8 +2,6 @@ import React from 'react';
 
 import styles from './style.scss'
 
-let dragged = "";
-
 class Projects extends React.Component{
 
     constructor(){
@@ -67,23 +65,37 @@ class Projects extends React.Component{
     }
 
     render(){
-
-        let projects = this.props.projects.map((project,index)=>{
-            return(
-                <div key={index} id={project.projectId} className='card my-3'>
-                    <div className='card-header'>
-                        <h6>{project.projectName}</h6>
+        let projects;
+        if(this.props.projects.projects !== undefined){
+            projects = this.props.projects.projects.map((project,index)=>{
+                console.log('this is the project', project.projectid)
+                return(
+                    <div class="col">
+                        <div key={index} id={project.projectId} className='card'>
+                            <div className='card-header'>
+                                <h6>{project.project_name}</h6>
+                            </div>
+                            <div className='card-body'>
+                                <p>{project.description}</p>
+                            </div>
+                            <div className='card-footer'>
+                                <button className='btn btn-sm' onClick={()=>{this.showProject()}} value = {project.projectid}>Show project</button>
+                                <button className='btn btn-sm' onClick={()=>{this.deleteProject()}} value = {project.projectid}>Delete Project</button>
+                            </div>
+                        </div>
                     </div>
-                    <div className='card-body'>
-                        <p>{project.projectDescription}</p>
+                )
+            })
+        }
+        else{
+            projects = ()=>{
+                return(
+                    <div>
+                        <p>Fetching data</p>
                     </div>
-                    <div className='card-footer'>
-                        <button className='btn btn-sm' onClick={()=>{this.showProject()}} value = {project.projectId}>Show project</button>
-                        <button className='btn btn-sm' onClick={()=>{this.deleteProject()}} value = {project.projectId}>Delete Project</button>
-                    </div>
-                </div>
-            )
-        })
+                )
+            }
+        }
 
         return(
             <div id='parent'className='text-center d-flex flex-column justify-content-around' >
@@ -91,7 +103,9 @@ class Projects extends React.Component{
                     <h4>Projects</h4>
                 </div>
                 <div className='card-body'>
-                    {projects}
+                    <div className='row'>
+                        {projects}
+                    </div>
                 </div>
             </div>
         )
