@@ -116,12 +116,40 @@ module.exports = (db) => {
         })
     }
 
+    let updateTask = (request,response)=>{
+
+        db.projects.updateTask(request.body.editTaskId, request.body.editTask,(error,result)=>{
+            if(error){
+                console.log(error)
+                console.log('error in updating task')
+            }
+            else{
+                response.send({result: result})
+            }
+        })
+    }
+
+    let updateDesc = (request,response)=>{
+
+        db.projects.updateDesc(request.body.editDescProjectId, request.body.editDesc,(error,result)=>{
+            if(error){
+                console.log(error)
+                console.log('error in updating description')
+            }
+            else{
+                response.send({result: result})
+            }
+        })
+    }
+
   return {
     getProjects: getProjects,
     getAll: getAll,
     deleteTask: deleteTask,
     deleteMember: deleteMember,
     newMember:newMember,
-    newTask: newTask
+    newTask: newTask,
+    updateTask: updateTask,
+    updateDesc: updateDesc
   };
 };

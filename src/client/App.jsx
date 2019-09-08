@@ -23,6 +23,23 @@ class App extends React.Component {
         }
     }
 
+    componentDidMount(){
+        let url = `http://localhost:3000/projects`
+        fetch(url)
+            .then(response =>  response.json())
+            .then(data => {
+                this.setState({projects: data})
+            })
+    }
+
+    showProject(id){
+        let projects = this.state.projects
+        let filterProjects = projects.projects.filter(project=> project.projectid == id)
+        let filterMembers = projects.members.filter(member=> member.project_id == id)
+        let filterTasks = projects.tasks.filter(task=> task.project_id == id)
+        this.setState({showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
+    }
+
     deleteProject(id){
         let projects = this.state.projects
         let projectIndex = projects.findIndex(project => project.projectId == id)
@@ -61,6 +78,22 @@ class App extends React.Component {
         this.showProject(projectId)
     }
 
+    editTask(editTaskId, editTask, editTaskProjectId){
+        let projects = this.state.projects
+        let editTaskIndex = projects.tasks.findIndex(task => task.taskid == editTaskId)
+        projects.tasks[editTaskIndex].task = editTask
+        this.setState({projects: projects})
+        this.showProject(editTaskProjectId)
+    }
+
+    doneTask(id,projectId){
+        let projects = this.state.projects
+        let taskIndex = projects.tasks.findIndex(task=>task.taskid == id)
+        projects.tasks.splice(taskIndex,1)
+        this.setState({projects: projects})
+        this.showProject(projectId)
+    }
+
     newMember(member){
         let projectId = member.result[0].project_id
         let data = {
@@ -83,46 +116,25 @@ class App extends React.Component {
                 projects.tasks.splice(i,1)
             }
         }
-        console.log(projects.tasks)
-        this.setState({projects: projects})
-        console.log('this is the project id in remove member: ', projectId)
-        this.showProject(projectId)
-    }
-
-
-    doneTask(id,projectId){
-        let projects = this.state.projects
-        let taskIndex = projects.tasks.findIndex(task=>task.taskid == id)
-        projects.tasks.splice(taskIndex,1)
-        console.log(projects.tasks)
         this.setState({projects: projects})
         this.showProject(projectId)
     }
+
 
     projectDisplay(display){
-        console.log(display)
         this.setState({showProject: [], showMembers:[], showTasks:[], displayProject: display })
     }
 
-
-    showProject(id){
-        console.log('this is the in show project in app jsx id: ', id)
-        console.log('rendering after deleting members')
+    editDesc(projectId,editDesc){
         let projects = this.state.projects
-        let filterProjects = projects.projects.filter(project=> project.projectid == id)
-        let filterMembers = projects.members.filter(member=> member.project_id == id)
-        let filterTasks = projects.tasks.filter(task=> task.project_id == id)
-        this.setState({showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
+        let projectIndex = projects.projects.findIndex(project => project.projectid == projectId)
+        projects.projects[projectIndex].description = editDesc
+        this.setState({projects: projects})
+        this.showProject(projectId)
     }
 
-    componentDidMount(){
-        let url = `http://localhost:3000/projects`
-        fetch(url)
-            .then(response =>  response.json())
-            .then(data => {
-                this.setState({projects: data})
-            })
-    }
+
+
 
     render() {
         let displayProject = this.state.displayProject
@@ -131,7 +143,7 @@ class App extends React.Component {
             showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
         }
         else{
-            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}}/>
+            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}}/>
         }
 
 
@@ -147,9 +159,6 @@ class App extends React.Component {
                     <div className='col-4'>
                     </div>
                 </div>
-            </div>
-            <div className='text-center'>
-                <input onChange={(event)=>{this.changeHandler(event)}} onKeyDown={(event)=>{this.changeHandler(event)}} value={this.state.value}/>
             </div>
             <div className='text-center'>
                 <div className={styles.projects}>

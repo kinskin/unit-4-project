@@ -138,6 +138,36 @@ module.exports = (dbPoolInstance) => {
         })
     }
 
+    let updateTask = (taskId, task, callback)=>{
+        let query = 'UPDATE tasks SET task=$1 WHERE taskid = $2'
+        let values = [task, taskId]
+
+        console.log(values)
+
+        dbPoolInstance.query(query,values,(error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null, queryResult.rows)
+            }
+        })
+    }
+
+    let updateDesc = (projectId,editDesc,callback)=>{
+        let query = 'UPDATE projects SET description=$1 WHERE projectid = $2'
+        let values = [editDesc, projectId]
+
+        dbPoolInstance.query(query,values,(error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null, queryResult.rows)
+            }
+        })
+    }
+
   return {
     newMember: newMember,
     newTask: newTask,
@@ -148,6 +178,8 @@ module.exports = (dbPoolInstance) => {
     getMembers: getMembers,
     getTasks: getTasks,
     getDoneTasks: getDoneTasks,
+    updateTask: updateTask,
+    updateDesc: updateDesc,
     getAll: getAll
   };
 };
