@@ -16,6 +16,7 @@ class App extends React.Component {
         this.state={
             value:'',
             projects: [],
+            singleProject: [],
             showProject: [],
             showMembers:[],
             showTasks:[],
@@ -38,10 +39,11 @@ class App extends React.Component {
 
     showProject(id){
         let projects = this.state.projects
+        let singleProject = projects.projects.filter(project=> project.projectid == id)
         let filterProjects = projects.projects
         let filterMembers = projects.members.filter(member=> member.project_id == id)
         let filterTasks = projects.tasks.filter(task=> task.project_id == id)
-        this.setState({showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
+        this.setState({singleProject: singleProject, showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
     }
 
     deleteProject(id){
@@ -159,7 +161,7 @@ class App extends React.Component {
             showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
         }
         else{
-            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}} addNewProject={(project)=>{this.addNewProject(project)}}/>
+            showProject = <Project singleProject={this.state.singleProject} project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}} addNewProject={(project)=>{this.addNewProject(project)}}/>
         }
 
 

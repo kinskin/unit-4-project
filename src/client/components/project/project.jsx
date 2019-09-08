@@ -315,6 +315,16 @@ class Project extends React.Component{
         let project = this.props.project
         let members = this.props.members
         let tasks = this.props.tasks
+        let singleProject = this.props.singleProject
+        console.log('this is the single project: ', singleProject)
+
+        let projectName = singleProject.map((project,index)=>{
+            return(
+                <div>
+                    <h6>{project.project_name}</h6>
+                </div>
+            )
+        })
 
         let mapProject = project.map((project,index)=>{
             return(
@@ -397,7 +407,7 @@ class Project extends React.Component{
                             <button className='btn btn-sm'onClick={()=>{this.projectDisplay()}}>Back to project board</button>
                         </div>
                         <div className='col-4'>
-                            <h4>Trello on Steroids</h4>
+                            <h4>Trello on Clicks</h4>
                         </div>
                         <div className='col-4'>
                         </div>
@@ -406,17 +416,25 @@ class Project extends React.Component{
                 <div className='card-body'>
                     <div className='row'>
                         <div className='col-3'>
-                            <button className='btn btn-sm btn-outline-primary mb-3' onClick={()=>{this.showAddProject()}}>{this.state.addProjectBtn}</button>
-                            <div className='form-group' style={{display:'none'}}id='addProject'>
-                                <p>Project Name:</p>
-                                <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName}/>
-                                <p>Project Description: </p>
-                                <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription}/>
-                                <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
+                            <div className='card-header mb-3'>
+                                <h6>Projects</h6>
+                            </div>
+                            <div className='card-body mb-3'>
+                                <button className='btn btn-sm btn-outline-primary mb-3' onClick={()=>{this.showAddProject()}}>{this.state.addProjectBtn}</button>
+                                <div className='form-group' style={{display:'none'}}id='addProject'>
+                                    <p>Project Name:</p>
+                                    <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName}/>
+                                    <p>Project Description: </p>
+                                    <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription}/>
+                                    <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
+                                </div>
                             </div>
                             {mapProject}
                         </div>
                         <div className='col-9'>
+                            <div className='card-header mb-3'>
+                                {projectName}
+                            </div>
                             <div className='row' style={{display: ''}} id={this.state.showProjectId}>
                                 {mapMembers}
                             </div>
