@@ -9,8 +9,6 @@ class Project extends React.Component{
 
         this.state = {
             message: 'SELECT PROJECT',
-            addMember: 'Add team members',
-            display: 'none',
             addTask: 'Add task',
             taskDisplay: 'none',
             projectId: '',
@@ -25,7 +23,10 @@ class Project extends React.Component{
             descPlaceholder: 'Description',
             editDescProjectId: '',
             editDesc: '',
-            showProjectId: ''
+            showProjectId: '',
+            addProjectBtn: 'New project',
+            projectName: '',
+            projectDescription: ''
         }
     }
 
@@ -35,19 +36,29 @@ class Project extends React.Component{
     }
 
     showNameInput(projectId){
-        let display = this.state.display
-        if(display === 'none'){
-            this.setState({display: '', addMember: 'Close', projectId: projectId})
+        let showNameInputDiv = document.getElementById('addMember'+projectId)
+        let showNameButton = document.getElementById('addMemberBtn'+projectId)
+        console.log('this is the add member button: ', showNameButton.innerText)
+        if(showNameInputDiv.style.display === 'none'){
+            showNameInputDiv.style.display = ''
+            showNameButton.innerText = 'Close'
+            this.setState({projectId: projectId})
         }
         else{
-            this.setState({display: 'none', addMember: 'Add team members', projectId: ''})
+            showNameInputDiv.style.display = 'none'
+            showNameButton.innerText = 'Add team members'
+            this.setState({projectId: '', memberName: ''})
         }
     }
 
     nameInput(event){
+        let projectId = this.state.projectId
+        let showNameInputDiv = document.getElementById('addMember'+projectId)
+        let showNameButton = document.getElementById('addMemberBtn'+projectId)
         if(event.keyCode === 13){
-            console.log(event.target.value)
-            this.setState({memberName: event.target.value, display: 'none', addMember: 'Add team members'})
+            showNameInputDiv.style.display = 'none'
+            showNameButton.innerText = 'Add team members'
+            this.setState({memberName: event.target.value})
             this.addMember()
         }
         else{
@@ -76,15 +87,15 @@ class Project extends React.Component{
         console.log('this is the member id in project jsx: ', memberId)
         this.props.removeMember(memberId,projectId)
         let url = '/delete/member'
-        // fetch(url, {
-        //     method: 'DELETE',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({memberId: memberId})
-        // })
-        // .then(res => res.json())
-        // .then(res => {
-        //     console.log(res)
-        // })
+        fetch(url, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({memberId: memberId})
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)
+        })
 
     }
 
@@ -122,7 +133,12 @@ class Project extends React.Component{
     }
 
     taskInput(event){
+        let memberId = this.state.memberId
+        let divId = document.getElementById(memberId)
+        let btnId = document.getElementById('btn'+memberId)
         if(event.keyCode === 13){
+            divId.style.display = 'none'
+            btnId.innerText = 'Add Task'
             this.setState({task: event.target.value, display: 'none', addtask: 'Add task'})
             this.addTask()
         }
@@ -136,13 +152,13 @@ class Project extends React.Component{
         this.props.doneTask(taskid,projectId)
         let url = '/delete/task'
 
-        // fetch(url, {
-        //     method: 'DELETE',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({id: id})
-        // })
-        // .then(res => res.json())
-        // .then(res => {console.log(res)})
+        fetch(url, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id: id})
+        })
+        .then(res => res.json())
+        .then(res => {console.log(res)})
     }
 
     showEditTask(taskId,memberId,projectId,taskName){
@@ -183,15 +199,15 @@ class Project extends React.Component{
 
         this.props.editTask(editTaskId, editTask, editTaskProjectId)
 
-        // let url = '/update/task'
-        // fetch(url, {
-        //     method: 'PUT',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({editTaskId: editTaskId, editTask: editTask})
-        // })
-        // .then(res => res.json())
-        // .then(res => {
-        //     console.log(res)})
+        let url = '/update/task'
+        fetch(url, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({editTaskId: editTaskId, editTask: editTask})
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)})
     }
 
     showDescInput(projectId,projectDesc){
@@ -230,14 +246,14 @@ class Project extends React.Component{
         this.props.editDesc(projectId,editDesc)
 
         let url = '/update/description'
-        // fetch(url, {
-        //     method: 'PUT',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({editDescProjectId: projectId, editDesc: editDesc})
-        // })
-        // .then(res => res.json())
-        // .then(res => {
-        //     console.log(res)})
+        fetch(url, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({editDescProjectId: projectId, editDesc: editDesc})
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res)})
 
     }
 
@@ -248,6 +264,51 @@ class Project extends React.Component{
         })
     }
 
+    showAddProject(){
+        let addProjectDiv = document.getElementById('addProject')
+        console.log('this is the add project div: ', addProjectDiv.style.display)
+        if(addProjectDiv.style.display === 'none'){
+            addProjectDiv.style.display = ''
+            this.setState({addProjectBtn: 'Close'})
+        }
+        else{
+             addProjectDiv.style.display = 'none'
+             this.setState({addProjectBtn: 'New project', projectName: '', projectDescription: ''})
+        }
+    }
+
+    projectName(event){
+            this.setState({projectName: event.target.value})
+            console.log('this is the projectName after hitting the enter button: ', event.target.value)
+    }
+
+    projectDescription(event){
+            this.setState({projectDescription: event.target.value})
+            console.log('this is the projectDescription after hitting the enter button: ', event.target.value)
+    }
+
+    addNewProject(){
+        let projectName = this.state.projectName
+        let projectDescription = this.state.projectDescription
+        console.log('this is the project description: ', this.state.projectDescription)
+
+        let addProjectDiv = document.getElementById('addProject')
+        addProjectDiv.style.display = 'none'
+
+        let url = '/new/projects'
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({projectName: projectName, projectDescription: projectDescription})
+        })
+        .then(res => res.json())
+        .then(res => {
+            this.setState({projectName: '', projectDescription: ''})
+            this.props.addNewProject(res)
+        })
+    }
+
+
 
     render(){
 
@@ -257,7 +318,7 @@ class Project extends React.Component{
 
         let mapProject = project.map((project,index)=>{
             return(
-                <div className='card my-4' key={index}>
+                <div className='card mb-4' key={index}>
                     <div className='card-header' onClick={(projectId)=>{this.showProject(project.projectid)}}>
                         <h6>{project.project_name}</h6>
                     </div>
@@ -270,8 +331,8 @@ class Project extends React.Component{
                         </div>
                     </div>
                     <div className='card-footer'>
-                        <button onClick={(projectid)=>{this.showNameInput(project.projectid)}} className='btn btn-sm'>{this.state.addMember}</button>
-                        <div className='my-3' style={{display: this.state.display}}>
+                        <button className='btn btn-sm' onClick={(projectid)=>{this.showNameInput(project.projectid)}} id={'addMemberBtn'+project.projectid}>Add team members</button>
+                        <div className='my-3' style={{display: 'none'}} id={'addMember'+project.projectid}>
                             <p>Add member</p>
                             <input className='form-control' onChange={(event)=>{this.nameInput(event)}} onKeyDown={(event)=>{this.nameInput(event)}} placeholder='Team member name' value={this.state.memberName}/>
                         </div>
@@ -336,7 +397,7 @@ class Project extends React.Component{
                             <button className='btn btn-sm'onClick={()=>{this.projectDisplay()}}>Back to project board</button>
                         </div>
                         <div className='col-4'>
-                            <h4>{this.props.project[0].project_name}</h4>
+                            <h4>Trello on Steroids</h4>
                         </div>
                         <div className='col-4'>
                         </div>
@@ -345,6 +406,14 @@ class Project extends React.Component{
                 <div className='card-body'>
                     <div className='row'>
                         <div className='col-3'>
+                            <button className='btn btn-sm btn-outline-primary mb-3' onClick={()=>{this.showAddProject()}}>{this.state.addProjectBtn}</button>
+                            <div className='form-group' style={{display:'none'}}id='addProject'>
+                                <p>Project Name:</p>
+                                <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName}/>
+                                <p>Project Description: </p>
+                                <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription}/>
+                                <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
+                            </div>
                             {mapProject}
                         </div>
                         <div className='col-9'>

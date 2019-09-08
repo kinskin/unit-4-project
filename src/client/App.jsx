@@ -137,7 +137,19 @@ class App extends React.Component {
         this.showProject(projectId)
     }
 
-
+    addNewProject(project){
+        let projectId = project.result[0].projectid
+        let projects = this.state.projects
+        let data = {
+            projectid: project.result[0].projectid,
+            project_name: project.result[0].project_name,
+            decription: project.result[0].description
+        }
+        projects.projects.push(data)
+        this.setState({projects: projects},()=>{
+            this.showThisProject(projectId)
+        })
+    }
 
 
     render() {
@@ -147,23 +159,12 @@ class App extends React.Component {
             showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
         }
         else{
-            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}}/>
+            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}} addNewProject={(project)=>{this.addNewProject(project)}}/>
         }
 
 
     return (
         <div className='container-fluid'>
-            <div className='header text-center'>
-                <div className='row'>
-                    <div className='col-4'>
-                    </div>
-                    <div className='col-4'>
-                        <h1>Trello Clone</h1>
-                    </div>
-                    <div className='col-4'>
-                    </div>
-                </div>
-            </div>
             <div className='text-center'>
                 <div className={styles.projects}>
                     {showProject}

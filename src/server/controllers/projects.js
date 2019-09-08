@@ -142,6 +142,19 @@ module.exports = (db) => {
         })
     }
 
+    let newProject = (request,response)=>{
+
+        db.projects.newProject(request.body.projectName, request.body.projectDescription, (error,result)=>{
+            if(error){
+                console.log(error)
+                console.log('error in add the new project')
+            }
+            else{
+                response.send({result: result})
+            }
+        })
+    }
+
   return {
     getProjects: getProjects,
     getAll: getAll,
@@ -149,6 +162,7 @@ module.exports = (db) => {
     deleteMember: deleteMember,
     newMember:newMember,
     newTask: newTask,
+    newProject: newProject,
     updateTask: updateTask,
     updateDesc: updateDesc
   };

@@ -1,6 +1,8 @@
 module.exports = (app, db) => {
   const projects = require('./controllers/projects')(db);
 
+
+  app.post('/new/projects', projects.newProject)
   app.put('/update/description', projects.updateDesc)
   app.put('/update/task', projects.updateTask)
   app.delete('/delete/member', projects.deleteMember)

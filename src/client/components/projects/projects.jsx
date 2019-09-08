@@ -87,20 +87,11 @@ class Projects extends React.Component{
                 )
             })
         }
-        else{
-            projects = ()=>{
-                return(
-                    <div>
-                        <p>Fetching data</p>
-                    </div>
-                )
-            }
-        }
 
         return(
             <div id='parent'className='text-center d-flex flex-column justify-content-around' >
                 <div className='card-header'>
-                    <h4>Projects</h4>
+                    <h4>Trello on Steroids</h4>
                 </div>
                 <div className='card-body'>
                     <div className='row'>

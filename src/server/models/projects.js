@@ -168,9 +168,27 @@ module.exports = (dbPoolInstance) => {
         })
     }
 
+    let newProject = (projectName, projectDesc, callback)=>{
+        console.log('this is the project name: ', projectName)
+        console.log('this is the project desc: ', projectDesc)
+        let query = 'INSERT INTO projects (project_name, description) VALUES ($1, $2) RETURNING *'
+        let values = [projectName, projectDesc]
+
+        dbPoolInstance.query(query, values, (error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null, queryResult.rows)
+            }
+        })
+    }
+
+
   return {
     newMember: newMember,
     newTask: newTask,
+    newProject: newProject,
     deleteTask: deleteTask,
     deleteMember: deleteMember,
     deleteMemberTask: deleteMemberTask,
