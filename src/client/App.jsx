@@ -32,9 +32,13 @@ class App extends React.Component {
             })
     }
 
+    showThisProject(projectId){
+        this.showProject(projectId)
+    }
+
     showProject(id){
         let projects = this.state.projects
-        let filterProjects = projects.projects.filter(project=> project.projectid == id)
+        let filterProjects = projects.projects
         let filterMembers = projects.members.filter(member=> member.project_id == id)
         let filterTasks = projects.tasks.filter(task=> task.project_id == id)
         this.setState({showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
@@ -143,7 +147,7 @@ class App extends React.Component {
             showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
         }
         else{
-            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}}/>
+            showProject = <Project project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}}/>
         }
 
 

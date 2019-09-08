@@ -24,7 +24,8 @@ class Project extends React.Component{
             editTask: '',
             descPlaceholder: 'Description',
             editDescProjectId: '',
-            editDesc: ''
+            editDesc: '',
+            showProjectId: ''
         }
     }
 
@@ -240,6 +241,14 @@ class Project extends React.Component{
 
     }
 
+    showProject(projectId){
+        console.log('this is the projectId: ', projectId)
+        this.setState({showProjectId: projectId}, ()=>{
+            this.props.showThisProject(projectId)
+        })
+    }
+
+
     render(){
 
         let project = this.props.project
@@ -248,8 +257,8 @@ class Project extends React.Component{
 
         let mapProject = project.map((project,index)=>{
             return(
-                <div className='card' key={index}>
-                    <div className='card-header'>
+                <div className='card my-4' key={index}>
+                    <div className='card-header' onClick={(projectId)=>{this.showProject(project.projectid)}}>
                         <h6>{project.project_name}</h6>
                     </div>
                     <div className='card-body'>
@@ -339,7 +348,7 @@ class Project extends React.Component{
                             {mapProject}
                         </div>
                         <div className='col-9'>
-                            <div className='row'>
+                            <div className='row' style={{display: ''}} id={this.state.showProjectId}>
                                 {mapMembers}
                             </div>
                         </div>
