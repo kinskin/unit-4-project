@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './style.scss'
 
 class Login extends React.Component{
 
@@ -93,55 +94,52 @@ class Login extends React.Component{
 
 
         return(
-            <div>
-                <div className='card' style={{display: ''}} id='signin'>
+            <div className={styles.mainCard}>
+                <div className='card bg-light text-primary' style={{display: ''}} id='signin'>
                     <div className='card-header'>
-                        <div className='row'>
-                            <div className='col-6'>
-                                <h6> Sign in page </h6>
-                            </div>
-                            <div className='col-6'>
-                                <button className = 'btn btn-sm btn-outline-primary' onClick={()=>{this.showSignup()}}> Sign up </button>
-                            </div>
-                        </div>
+                        <h3> Sign in page </h3>
                     </div>
                     <div className='card-body'>
                         <div className='form-group'>
                             <p> Email Address </p>
-                            <input className='form-control' onChange={(event)=>{this.signInEmail(event)}} placeholder={this.state.email}/>
+                            <input className='form-control mb-2' onChange={(event)=>{this.signInEmail(event)}} placeholder={this.state.email}/>
                             <p> Password </p>
-                            <input type='password' className='form-control' onChange={(event)=>{this.signInPassword(event)}} placeholder={this.state.password}/>
+                            <input type='password' className='form-control mb-2' onChange={(event)=>{this.signInPassword(event)}} placeholder={this.state.password}/>
                             <br/>
-                            <br/>
-                            <button className='btn btn-sm btn-outline-success' onClick={()=>{this.signInCheck()}}> Sign in </button>
+                            <div className='row text-center'>
+                                <div className='col-6'>
+                                    <button className = 'btn btn-sm btn-outline-primary' onClick={()=>{this.showSignup()}}> Sign up </button>
+                                </div>
+                                <div className='col-6'>
+                                    <button className='btn btn-sm btn-outline-success' onClick={()=>{this.signInCheck()}}> Sign in </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div className='card' style={{display:'none'}} id='signup'>
-                    <div className='card-header'>
-                        <div className='row'>
-                            <div className='col-6'>
-                                <h6> Sign up page </h6>
-                            </div>
-                            <div className='col-6'>
-                                <button className = 'btn btn-sm btn-outline-primary' onClick={()=>{this.showSignin()}}> Sign in </button>
-                            </div>
-                        </div>
+                    <div className='card-header bg-light text-secondary'>
+                        <h3> Sign up page </h3>
                     </div>
                     <div className='card-body'>
                         <div className='form-group'>
                             <p> Email Address </p>
-                            <input className='form-control' onChange={(event)=>{this.signUpEmail(event)}} value={this.state.newEmail} placeholder={this.state.email}/>
+                            <input className='form-control mb-2' onChange={(event)=>{this.signUpEmail(event)}} value={this.state.newEmail} placeholder={this.state.email}/>
                             <p> Password </p>
-                            <input type='password' className='form-control' onChange={(event)=>{this.signUpPassword(event)}} value={this.state.newPassword} placeholder={this.state.password}/>
+                            <input type='password' className='form-control mb-2' onChange={(event)=>{this.signUpPassword(event)}} value={this.state.newPassword} placeholder={this.state.password}/>
                             <br/>
-                            <br/>
-                            <button className='btn btn-sm btn-outline-success' onClick={()=>{this.addUser()}}> Sign up </button>
+                            <div className='row text-center'>
+                                <div className='col-6'>
+                                    <button className = 'btn btn-sm btn-outline-primary' onClick={()=>{this.showSignin()}}> Back to Sign in </button>
+                                </div>
+                                <div className='col-6'>
+                                    <button className='btn btn-sm btn-outline-success' onClick={()=>{this.addUser()}}> Sign up </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         )
     }
 }

@@ -413,48 +413,45 @@ class Project extends React.Component{
         })
 
         return(
-            <div>
-                <div className='card-header'>
-                    <div className='row'>
-                        <div className='col-4'>
+
+            <div className='row'>
+                <div className='col-3'>
+                    <div className='card'>
+                        <div className='card-header mb-3 bg-light'>
+                            <div className='row'>
+                                <div className='col-6 text-primary'>
+                                    <h3>Projects</h3>
+                                </div>
+                                <div className='col-6 text-right'>
+                                    <button className='btn btn-sm btn-outline-danger'onClick={()=>{this.projectDisplay()}}>Sign out</button>
+                                </div>
+                            </div>
                         </div>
-                        <div className='col-4'>
-                            <h4>Trello on Clicks</h4>
+                        <button className='btn btn-sm btn-outline-primary mb-3' onClick={()=>{this.showAddProject()}}>{this.state.addProjectBtn}</button>
+                        <div className='card-body mb-3 bg-light'>
+                            <div className='form-group' style={{display:'none'}}id='addProject'>
+                                <p>Project Name:</p>
+                                <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName}/>
+                                <p>Project Description: </p>
+                                <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription}/>
+                                <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
+                            </div>
                         </div>
-                        <div className='col-4'>
-                            <button className='btn btn-sm'onClick={()=>{this.projectDisplay()}}>Sign out</button>
+                        <div className='card-footer'>
+                            {mapProject}
                         </div>
                     </div>
                 </div>
-                <div className='card-body'>
-                    <div className='row'>
-                        <div className='col-3'>
-                            <div className='card-header mb-3'>
-                                <h6>Projects</h6>
-                            </div>
-                            <div className='card-body mb-3'>
-                                <button className='btn btn-sm btn-outline-primary mb-3' onClick={()=>{this.showAddProject()}}>{this.state.addProjectBtn}</button>
-                                <div className='form-group' style={{display:'none'}}id='addProject'>
-                                    <p>Project Name:</p>
-                                    <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName}/>
-                                    <p>Project Description: </p>
-                                    <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription}/>
-                                    <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
-                                </div>
-                            </div>
-                            {mapProject}
-                        </div>
-                        <div className='col-9'>
-                            <div className='card-header mb-3'>
-                                {projectName}
-                            </div>
-                            <div className='row' style={{display: ''}} id={this.state.showProjectId}>
-                                {mapMembers}
-                            </div>
-                        </div>
+                <div className='col-9'>
+                    <div className='card-header mb-3'>
+                        {projectName}
+                    </div>
+                    <div className='row' style={{display: ''}} id={this.state.showProjectId}>
+                        {mapMembers}
                     </div>
                 </div>
             </div>
+
         )
     }
 

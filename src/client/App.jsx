@@ -1,11 +1,12 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
+import Styles from './style.scss'
 
 import styles from './style.scss';
-import Projects from './components/projects/projects'
 import Bins from './components/bins/bins'
 import Project from './components/project/project'
 import Done from './components/done/done'
+import Login from './components/login/login'
 
 
 class App extends React.Component {
@@ -174,7 +175,7 @@ class App extends React.Component {
         let displayProject = this.state.displayProject
         let showProject;
         if(displayProject === true){
-            showProject = <Projects signInCheck={(userId)=>{this.signInCheck(userId)}}/>
+            showProject = <Login signInCheck={(userId)=>{this.signInCheck(userId)}}/>
         }
         else{
             showProject = <Project singleProject={this.state.singleProject} project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}} addNewProject={(project)=>{this.addNewProject(project)}}/>
@@ -183,11 +184,10 @@ class App extends React.Component {
 
     return (
         <div className='container-fluid'>
-            <div className='text-center'>
-                <div className={styles.projects}>
-                    {showProject}
-                </div>
-            </div>
+            <nav className={styles.navbar}>
+                <p>Trello on Clicks</p>
+            </nav>
+            {showProject}
         </div>
     );
   }
