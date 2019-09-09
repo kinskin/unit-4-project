@@ -184,8 +184,41 @@ module.exports = (dbPoolInstance) => {
         })
     }
 
+    let newUser = (userEmail, userPassword, callback)=>{
+
+        let query = 'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *'
+        let values = [userEmail, userPassword]
+
+        dbPoolInstance.query(query,values,(error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null,queryResult.rows)
+            }
+        })
+
+    }
+
+    let userSignIn = (email,password,callback)=>{
+        let query = 'select * from users where email = $1 and password = $2'
+        let values = [email,password]
+
+        dbPoolInstance.query(query,values, (error,queryResult)=>{
+            if(error){
+                callback(error,null)
+            }
+            else{
+                callback(null,queryResult.rows)
+            }
+        })
+
+    }
+
 
   return {
+    userSignIn: userSignIn,
+    newUser: newUser,
     newMember: newMember,
     newTask: newTask,
     newProject: newProject,

@@ -33,6 +33,13 @@ class App extends React.Component {
             })
     }
 
+    showUserProject(user_id){
+        console.log('this is the user_id: ', user_id)
+        let projects = this.state.projects
+        let filterUserProject = projects.projects.filter(project=>project.user_id == user_id)
+        this.setState({showProject: filterUserProject, displayProject: false})
+    }
+
     showThisProject(projectId){
         this.showProject(projectId)
     }
@@ -40,18 +47,9 @@ class App extends React.Component {
     showProject(id){
         let projects = this.state.projects
         let singleProject = projects.projects.filter(project=> project.projectid == id)
-        let filterProjects = projects.projects
         let filterMembers = projects.members.filter(member=> member.project_id == id)
         let filterTasks = projects.tasks.filter(task=> task.project_id == id)
-        this.setState({singleProject: singleProject, showProject: filterProjects, showMembers: filterMembers, showTasks: filterTasks, displayProject: false})
-    }
-
-    deleteProject(id){
-        let projects = this.state.projects
-        let projectIndex = projects.findIndex(project => project.projectId == id)
-        projects.splice(projects[projectIndex], 1)
-        this.setState({projects: projects})
-
+        this.setState({singleProject: singleProject, showMembers: filterMembers, showTasks: filterTasks})
     }
 
     changeHandler(event){
@@ -153,12 +151,23 @@ class App extends React.Component {
         })
     }
 
+    signInCheck(userId){
+        let loggedInCookie = document.cookie
+        let cookie = loggedInCookie.split('')
+        let indexNum = loggedInCookie.length-1
+        let user_id = cookie[indexNum]
+
+        if (loggedInCookie.includes('true')) {
+            this.showUserProject(user_id)
+        }
+    }
+
 
     render() {
         let displayProject = this.state.displayProject
         let showProject;
         if(displayProject === true){
-            showProject = <Projects projects={this.state.projects}  showProject={(id)=>{this.showProject(id)}}/>
+            showProject = <Projects signInCheck={(userId)=>{this.signInCheck(userId)}}/>
         }
         else{
             showProject = <Project singleProject={this.state.singleProject} project={this.state.showProject} members={this.state.showMembers} tasks={this.state.showTasks} projectDisplay={(display)=>{this.projectDisplay(display)}} doneTask={(id,projectId)=>{this.doneTask(id,projectId)}} addMember={(member)=>{this.newMember(member)}} addTask={(task)=>{this.newTask(task)}} removeMember={(memberId,projectId)=>{this.removeMember(memberId,projectId)}} editTask={(editTaskId, editTask, editTaskProjectId)=>{this.editTask(editTaskId, editTask, editTaskProjectId)}} editDesc={(projectId,editDesc)=>{this.editDesc(projectId,editDesc)}} showThisProject={(projectId)=>{this.showThisProject(projectId)}} addNewProject={(project)=>{this.addNewProject(project)}}/>

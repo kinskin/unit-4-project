@@ -376,7 +376,7 @@ class Project extends React.Component{
                     )
                 })
             return(
-                <div className='col d-flex flex-column'>
+                <div className='d-flex flex-row'>
                     <div className='card'>
                         <div className='card-header d-inline'>
                             <div>

@@ -155,6 +155,42 @@ module.exports = (db) => {
         })
     }
 
+    let newUser = (request,response)=>{
+        db.projects.newUser(request.body.newEmail, request.body.newPassword,(error,result)=>{
+            if(error){
+                console.log(error)
+                console.log('error in adding new user')
+            }
+            else{
+                response.send({result: result})
+            }
+        })
+    }
+
+    let userSignIn = (request,response)=>{
+
+        db.projects.userSignIn(request.body.email, request.body.password, (error,result)=>{
+            if(error){
+                console.log(error)
+                console.log('error in checking user')
+            }
+            else{
+                if(result.length > 0){
+                    console.log('this is the result of the query id: ', result[0].userid)
+                    console.log('this is the result of the query email: ', result[0].email)
+                    console.log('this is the result of the query password: ', result[0].password)
+                    let userId = result[0].userid
+                    response.cookie('loggedIn', true)
+                    response.cookie('user_id', userId)
+                    response.send({result: result})
+                }
+                else{
+                    response.send({result: null})
+                }
+            }
+        })
+    }
+
   return {
     getProjects: getProjects,
     getAll: getAll,
@@ -164,6 +200,8 @@ module.exports = (db) => {
     newTask: newTask,
     newProject: newProject,
     updateTask: updateTask,
-    updateDesc: updateDesc
+    updateDesc: updateDesc,
+    newUser: newUser,
+    userSignIn: userSignIn
   };
 };
