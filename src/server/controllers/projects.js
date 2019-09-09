@@ -144,7 +144,7 @@ module.exports = (db) => {
 
     let newProject = (request,response)=>{
 
-        db.projects.newProject(request.body.projectName, request.body.projectDescription, (error,result)=>{
+        db.projects.newProject(request.body.projectName, request.body.projectDescription, request.body.projectUserId, (error,result)=>{
             if(error){
                 console.log(error)
                 console.log('error in add the new project')
@@ -191,6 +191,13 @@ module.exports = (db) => {
         })
     }
 
+    let userSignOut = (request,response)=>{
+        response.clearCookie('loggedIn');
+        response.clearCookie('user_id');
+
+        response.send({result: 'cookies clear'})
+    }
+
   return {
     getProjects: getProjects,
     getAll: getAll,
@@ -202,6 +209,7 @@ module.exports = (db) => {
     updateTask: updateTask,
     updateDesc: updateDesc,
     newUser: newUser,
-    userSignIn: userSignIn
+    userSignIn: userSignIn,
+    userSignOut: userSignOut
   };
 };

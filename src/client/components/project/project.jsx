@@ -32,7 +32,17 @@ class Project extends React.Component{
 
     projectDisplay(){
         let display = true
-        this.props.projectDisplay(display)
+
+        let url = '/logout'
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(res => res.json())
+        .then(res => {
+            this.props.projectDisplay(display)
+            console.log(res)
+        })
     }
 
     showNameInput(projectId){
@@ -258,7 +268,6 @@ class Project extends React.Component{
     }
 
     showProject(projectId){
-        console.log('this is the projectId: ', projectId)
         this.setState({showProjectId: projectId}, ()=>{
             this.props.showThisProject(projectId)
         })
@@ -295,15 +304,20 @@ class Project extends React.Component{
         let addProjectDiv = document.getElementById('addProject')
         addProjectDiv.style.display = 'none'
 
+        let loggedInCookie = document.cookie
+        let cookie = loggedInCookie.split('')
+        let indexNum = loggedInCookie.length-1
+        let user_id = cookie[indexNum]
+
         let url = '/new/projects'
         fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({projectName: projectName, projectDescription: projectDescription})
+            body: JSON.stringify({projectName: projectName, projectDescription: projectDescription, projectUserId: user_id})
         })
         .then(res => res.json())
         .then(res => {
-            this.setState({projectName: '', projectDescription: ''})
+            this.setState({projectName: '', projectDescription: '', addProjectBtn: 'New project'})
             this.props.addNewProject(res)
         })
     }
@@ -316,7 +330,6 @@ class Project extends React.Component{
         let members = this.props.members
         let tasks = this.props.tasks
         let singleProject = this.props.singleProject
-        console.log('this is the single project: ', singleProject)
 
         let projectName = singleProject.map((project,index)=>{
             return(
@@ -404,12 +417,12 @@ class Project extends React.Component{
                 <div className='card-header'>
                     <div className='row'>
                         <div className='col-4'>
-                            <button className='btn btn-sm'onClick={()=>{this.projectDisplay()}}>Back to project board</button>
                         </div>
                         <div className='col-4'>
                             <h4>Trello on Clicks</h4>
                         </div>
                         <div className='col-4'>
+                            <button className='btn btn-sm'onClick={()=>{this.projectDisplay()}}>Sign out</button>
                         </div>
                     </div>
                 </div>

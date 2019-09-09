@@ -2,7 +2,7 @@ module.exports = (app, db) => {
   const projects = require('./controllers/projects')(db);
 
 
-
+  app.post('/logout', projects.userSignOut)
   app.post('/user/signin', projects.userSignIn)
   app.post('/new/user', projects.newUser)
   app.post('/new/projects', projects.newProject)

@@ -25,30 +25,34 @@ class App extends React.Component {
     }
 
     componentDidMount(){
+
         let url = `http://localhost:3000/projects`
         fetch(url)
             .then(response =>  response.json())
             .then(data => {
                 this.setState({projects: data})
+                let loggedInCookie = document.cookie
+                let cookie = loggedInCookie.split('')
+                let indexNum = loggedInCookie.length-1
+                let user_id = cookie[indexNum]
+                if (loggedInCookie.includes('true')) {
+                    this.setState({displayProject: false})
+                    this.showUserProject(user_id)
+                }
             })
     }
 
     showUserProject(user_id){
-        console.log('this is the user_id: ', user_id)
         let projects = this.state.projects
         let filterUserProject = projects.projects.filter(project=>project.user_id == user_id)
         this.setState({showProject: filterUserProject, displayProject: false})
     }
 
     showThisProject(projectId){
-        this.showProject(projectId)
-    }
-
-    showProject(id){
         let projects = this.state.projects
-        let singleProject = projects.projects.filter(project=> project.projectid == id)
-        let filterMembers = projects.members.filter(member=> member.project_id == id)
-        let filterTasks = projects.tasks.filter(task=> task.project_id == id)
+        let singleProject = projects.projects.filter(project=> project.projectid == projectId)
+        let filterMembers = projects.members.filter(member=> member.project_id == projectId)
+        let filterTasks = projects.tasks.filter(task=> task.project_id == projectId)
         this.setState({singleProject: singleProject, showMembers: filterMembers, showTasks: filterTasks})
     }
 
@@ -79,7 +83,7 @@ class App extends React.Component {
         let projects = this.state.projects
         projects.tasks.push(data)
         this.setState({projects: projects})
-        this.showProject(projectId)
+        this.showThisProject(projectId)
     }
 
     editTask(editTaskId, editTask, editTaskProjectId){
@@ -87,7 +91,7 @@ class App extends React.Component {
         let editTaskIndex = projects.tasks.findIndex(task => task.taskid == editTaskId)
         projects.tasks[editTaskIndex].task = editTask
         this.setState({projects: projects})
-        this.showProject(editTaskProjectId)
+        this.showThisProject(editTaskProjectId)
     }
 
     doneTask(id,projectId){
@@ -95,7 +99,7 @@ class App extends React.Component {
         let taskIndex = projects.tasks.findIndex(task=>task.taskid == id)
         projects.tasks.splice(taskIndex,1)
         this.setState({projects: projects})
-        this.showProject(projectId)
+        this.showThisProject(projectId)
     }
 
     newMember(member){
@@ -108,7 +112,7 @@ class App extends React.Component {
         let projects = this.state.projects
         projects.members.push(data)
         this.setState({projects: projects})
-        this.showProject(projectId)
+        this.showThisProject(projectId)
     }
 
     removeMember(memberId,projectId){
@@ -121,12 +125,12 @@ class App extends React.Component {
             }
         }
         this.setState({projects: projects})
-        this.showProject(projectId)
+        this.showThisProject(projectId)
     }
 
 
     projectDisplay(display){
-        this.setState({showProject: [], showMembers:[], showTasks:[], displayProject: display })
+        this.setState({singleProject: [], showProject: [], showMembers:[], showTasks:[], displayProject: display })
     }
 
     editDesc(projectId,editDesc){
@@ -134,7 +138,7 @@ class App extends React.Component {
         let projectIndex = projects.projects.findIndex(project => project.projectid == projectId)
         projects.projects[projectIndex].description = editDesc
         this.setState({projects: projects})
-        this.showProject(projectId)
+        this.showThisProject(projectId)
     }
 
     addNewProject(project){
@@ -143,10 +147,13 @@ class App extends React.Component {
         let data = {
             projectid: project.result[0].projectid,
             project_name: project.result[0].project_name,
-            decription: project.result[0].description
+            description: project.result[0].description,
+            user_id: project.result[0].user_id
         }
         projects.projects.push(data)
         this.setState({projects: projects},()=>{
+            console.log('this is the project id: ', projectId)
+            this.showUserProject(project.result[0].user_id)
             this.showThisProject(projectId)
         })
     }
