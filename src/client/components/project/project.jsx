@@ -268,7 +268,6 @@ class Project extends React.Component{
     showProject(projectId){
         this.setState({showProjectId: projectId}, ()=>{
             let projectDiv = document.getElementById(projectId)
-            console.log('this is the project div: ', projectDiv.style.display)
             if(projectDiv.style.display === 'none'){
                 projectDiv.style.display = ''
             }
@@ -278,7 +277,6 @@ class Project extends React.Component{
 
     showAddProject(){
         let addProjectDiv = document.getElementById('addProject')
-        console.log('this is the add project div: ', addProjectDiv.style.display)
         if(addProjectDiv.style.display === 'none'){
             addProjectDiv.style.display = ''
             this.setState({addProjectBtn: ' Close', addProjectIcon: 'minus'})
@@ -291,18 +289,15 @@ class Project extends React.Component{
 
     projectName(event){
             this.setState({projectName: event.target.value})
-            console.log('this is the projectName after hitting the enter button: ', event.target.value)
     }
 
     projectDescription(event){
             this.setState({projectDescription: event.target.value})
-            console.log('this is the projectDescription after hitting the enter button: ', event.target.value)
     }
 
     addNewProject(){
         let projectName = this.state.projectName
         let projectDescription = this.state.projectDescription
-        console.log('this is the project description: ', this.state.projectDescription)
 
         let addProjectDiv = document.getElementById('addProject')
         addProjectDiv.style.display = 'none'

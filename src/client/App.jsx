@@ -67,12 +67,6 @@ class App extends React.Component {
         }
     }
 
-
-    allowDrop(event){
-        event.preventDefault()
-    }
-
-
     newTask(task){
         let projectId = task.result[0].project_id
         let data = {
