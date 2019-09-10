@@ -97,7 +97,7 @@ class Login extends React.Component{
             <div className={styles.mainCard}>
                 <div className='card bg-light text-primary' style={{display: ''}} id='signin'>
                     <div className='card-header'>
-                        <h3> Sign in page </h3>
+                        <h3> Sign in </h3>
                     </div>
                     <div className='card-body'>
                         <div className='form-group'>
@@ -117,9 +117,9 @@ class Login extends React.Component{
                         </div>
                     </div>
                 </div>
-                <div className='card' style={{display:'none'}} id='signup'>
-                    <div className='card-header bg-light text-secondary'>
-                        <h3> Sign up page </h3>
+                <div className='card text-success' style={{display:'none'}} id='signup'>
+                    <div className='card-header bg-light'>
+                        <h3> Sign up </h3>
                     </div>
                     <div className='card-body'>
                         <div className='form-group'>

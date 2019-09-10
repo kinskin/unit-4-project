@@ -85,6 +85,7 @@ class App extends React.Component {
         projects.tasks.push(data)
         this.setState({projects: projects})
         this.showThisProject(projectId)
+
     }
 
     editTask(editTaskId, editTask, editTaskProjectId){

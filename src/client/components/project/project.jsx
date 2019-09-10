@@ -1,6 +1,5 @@
 import React from 'react';
-
-
+import styles from './style.scss'
 
 class Project extends React.Component{
 
@@ -24,9 +23,12 @@ class Project extends React.Component{
             editDescProjectId: '',
             editDesc: '',
             showProjectId: '',
-            addProjectBtn: 'New project',
+            addProjectBtn: ' New project',
             projectName: '',
-            projectDescription: ''
+            projectDescription: '',
+            addProjectIcon: 'plus',
+            addMemberIcon: ' Member',
+            addMemberImg: 'plus'
         }
     }
 
@@ -47,17 +49,14 @@ class Project extends React.Component{
 
     showNameInput(projectId){
         let showNameInputDiv = document.getElementById('addMember'+projectId)
-        let showNameButton = document.getElementById('addMemberBtn'+projectId)
-        console.log('this is the add member button: ', showNameButton.innerText)
+
         if(showNameInputDiv.style.display === 'none'){
             showNameInputDiv.style.display = ''
-            showNameButton.innerText = 'Close'
-            this.setState({projectId: projectId})
+            this.setState({projectId: projectId, addMemberImg:'minus',addMemberIcon:' Close'})
         }
         else{
             showNameInputDiv.style.display = 'none'
-            showNameButton.innerText = 'Add team members'
-            this.setState({projectId: '', memberName: ''})
+            this.setState({projectId: '', memberName: '', addMemberImg:'plus', addMemberIcon:' Member'})
         }
     }
 
@@ -67,8 +66,7 @@ class Project extends React.Component{
         let showNameButton = document.getElementById('addMemberBtn'+projectId)
         if(event.keyCode === 13){
             showNameInputDiv.style.display = 'none'
-            showNameButton.innerText = 'Add team members'
-            this.setState({memberName: event.target.value})
+            this.setState({memberName: event.target.value, addMemberImg:'plus', addMemberIcon:' Member'})
             this.addMember()
         }
         else{
@@ -110,7 +108,7 @@ class Project extends React.Component{
     }
 
     taskShowInput(memberId,projectId){
-        let divId = document.getElementById(memberId)
+        let divId = document.getElementById("addTaskDiv"+memberId)
         let btnId = document.getElementById('btn'+memberId)
         if(divId.style.display === 'none'){
             divId.style.display = ''
@@ -144,7 +142,7 @@ class Project extends React.Component{
 
     taskInput(event){
         let memberId = this.state.memberId
-        let divId = document.getElementById(memberId)
+        let divId = document.getElementById("addTaskDiv"+memberId)
         let btnId = document.getElementById('btn'+memberId)
         if(event.keyCode === 13){
             divId.style.display = 'none'
@@ -269,6 +267,11 @@ class Project extends React.Component{
 
     showProject(projectId){
         this.setState({showProjectId: projectId}, ()=>{
+            let projectDiv = document.getElementById(projectId)
+            console.log('this is the project div: ', projectDiv.style.display)
+            if(projectDiv.style.display === 'none'){
+                projectDiv.style.display = ''
+            }
             this.props.showThisProject(projectId)
         })
     }
@@ -278,11 +281,11 @@ class Project extends React.Component{
         console.log('this is the add project div: ', addProjectDiv.style.display)
         if(addProjectDiv.style.display === 'none'){
             addProjectDiv.style.display = ''
-            this.setState({addProjectBtn: 'Close'})
+            this.setState({addProjectBtn: ' Close', addProjectIcon: 'minus'})
         }
         else{
              addProjectDiv.style.display = 'none'
-             this.setState({addProjectBtn: 'New project', projectName: '', projectDescription: ''})
+             this.setState({addProjectBtn: ' New project', projectName: '', projectDescription: '', addProjectIcon: 'plus'})
         }
     }
 
@@ -322,6 +325,22 @@ class Project extends React.Component{
         })
     }
 
+    hideCheckBox(taskId){
+        let checkTick = document.getElementById('taskhide'+taskId)
+        let checkUntick = document.getElementById('taskunhide'+taskId)
+        checkTick.style.display = 'none'
+        checkUntick.style.display = ''
+
+
+    }
+
+    unHideCheckBox(taskId){
+        let checkTick = document.getElementById('taskhide'+taskId)
+        let checkUntick = document.getElementById('taskunhide'+taskId)
+        checkTick.style.display = ''
+        checkUntick.style.display = 'none'
+    }
+
 
 
     render(){
@@ -334,7 +353,15 @@ class Project extends React.Component{
         let projectName = singleProject.map((project,index)=>{
             return(
                 <div>
-                    <h6>{project.project_name}</h6>
+                    <h3>{project.project_name}</h3>
+                    <i class={'bx bx-'+this.state.addMemberImg+' mt-2'} style={{fontSize: '20px'}}onClick={(projectid)=>{this.showNameInput(project.projectid)}} id={styles.addMember}>{this.state.addMemberIcon}</i>
+                    <div className='my-2' style={{display: 'none'}} id={'addMember'+project.projectid}>
+                        <div className='col-4'>
+                            <p>Add member</p>
+                            <input className='form-control' onChange={(event)=>{this.nameInput(event)}} onKeyDown={(event)=>{this.nameInput(event)}} placeholder='Team member name' value={this.state.memberName}/>
+                            <small>Press "Enter" to submit</small>
+                        </div>
+                    </div>
                 </div>
             )
         })
@@ -343,22 +370,29 @@ class Project extends React.Component{
             return(
                 <div className='card mb-4' key={index}>
                     <div className='card-header' onClick={(projectId)=>{this.showProject(project.projectid)}}>
-                        <h6>{project.project_name}</h6>
+                        <h6 id={styles.pDesc}>{project.project_name}</h6>
                     </div>
                     <div className='card-body'>
-                        <div className='row' style={{display: ''}} onDoubleClick={(projectId, projectDesc)=>{this.showDescInput(project.projectid, project.description)}} id={'descDiv'+project.projectid}>
-                            <p>{project.description}</p>
+                        <div className='row' style={{display: ''}} id={'descDiv'+project.projectid}>
+                            <div className='col-9'>
+                                <p>{project.description}</p>
+                            </div>
+                            <div className='col-3 text-right'>
+                               <i className='bx bxs-pencil' style={{fontSize: '20px'}} onClick={(projectId, projectDesc)=>{this.showDescInput(project.projectid, project.description)}} id={styles.pencil}></i>
+                            </div>
                         </div>
                         <div className='row' style={{display: 'none'}} onDoubleClick={(projectId)=>{this.showDescInput(project.projectid)}} id={'editDescDiv'+project.projectid}>
-                            <input className='form-control' placeholder={this.state.descPlaceholder} onChange={(event)=>{this.editDescInput(event)}} onKeyDown={(event)=>{this.editDescInput(event)}} value={this.state.editDesc}/>
+                            <div className='col-9'>
+                                <input className='form-control' placeholder={this.state.descPlaceholder} onChange={(event)=>{this.editDescInput(event)}} onKeyDown={(event)=>{this.editDescInput(event)}} value={this.state.editDesc}/>
+                                <small>Press "Enter" to submit</small>
+                            </div>
+                            <div className='col-3 text-right'>
+                                <i className='bx bx-x' style={{fontSize: '30px'}} onClick={(projectId)=>{this.showDescInput(project.projectid)}} id={styles.close} ></i>
+                            </div>
                         </div>
                     </div>
                     <div className='card-footer'>
-                        <button className='btn btn-sm' onClick={(projectid)=>{this.showNameInput(project.projectid)}} id={'addMemberBtn'+project.projectid}>Add team members</button>
-                        <div className='my-3' style={{display: 'none'}} id={'addMember'+project.projectid}>
-                            <p>Add member</p>
-                            <input className='form-control' onChange={(event)=>{this.nameInput(event)}} onKeyDown={(event)=>{this.nameInput(event)}} placeholder='Team member name' value={this.state.memberName}/>
-                        </div>
+                        <button>Delete Project</button>
                     </div>
                 </div>
             )
@@ -370,71 +404,76 @@ class Project extends React.Component{
                     return(
                         <div className='card-body d-inline'>
                             <div className='row' style={{display: ''}} id={'task'+task.taskid}>
-                                <div className='col-8' onDoubleClick={(taskId, memberId, projectId, taskName)=>{this.showEditTask(task.taskid, task.member_id,task.project_id, task.task)}}>
-                                <p>{task.task}</p>
+                                <div className='col-8 d-flex flex-row'>
+                                    <i className='bx bx-checkbox' onClick={(taskId)=>{this.hideCheckBox(task.taskid)}} style={{fontSize: '30px', display:''}} id={'taskhide'+task.taskid}></i>
+                                    <i className='bx bx-checkbox-checked' onClick = {(taskId)=>{this.unHideCheckBox(task.taskid)}}style={{fontSize: '30px', display:'none'}} id={'taskunhide'+task.taskid}></i>
+                                    <p>{task.task}</p>
                                 </div>
-                                <div className='col-4'>
-                                    <button className='btn btn-sm btn-outline-success' onClick={(taskid,projectid)=>{this.doneTask(task.taskid, task.project_id)}}>Complete task</button>
+                                <div className='col-4 d-flex justify-content-between'>
+                                    <i class='bx bxs-pencil' style={{fontSize: '20px', display: ''}} onClick={(taskId, memberId, projectId, taskName)=>{this.showEditTask(task.taskid, task.member_id,task.project_id, task.task)}} id={'taskpencil'+task.taskid}></i>
+                                    <i class='bx bxs-trash' style={{fontSize: '20px'}} onClick={(taskid,projectid)=>{this.doneTask(task.taskid, task.project_id)}}></i>
                                 </div>
                             </div>
                             <div className='row' style={{display: 'none'}} id={'editTask'+task.taskid}>
-                                <div className='col-8' onDoubleClick={(taskId)=>{this.showEditTask(task.taskid)}}>
+                                <div className='col-9'>
                                     <input className='form-control' value={this.state.editTask} onChange={(event)=>{this.editInput(event)}} onKeyDown={(event)=>{this.editInput(event)}}/>
+                                    <small>Press "Enter" to submit</small>
                                 </div>
-                                <div className='col-4'>
-                                    <button className='btn btn-sm btn-outline-success'>Edit task</button>
+                                <div className='col-3 text-right'>
+                                    <i className='bx bx-x' style={{fontSize:'30px'}} onClick={(taskId)=>{this.showEditTask(task.taskid)}}></i>
                                 </div>
                             </div>
                         </div>
                     )
                 })
             return(
-                <div className='d-flex flex-row'>
-                    <div className='card'>
-                        <div className='card-header d-inline'>
-                            <div>
-                                <h6>
-                                    {member.member_name}
-                                </h6>
-                                <div className='row justify-content-around'>
-                                    <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.taskShowInput(member.memberid, member.project_id)}} id={'btn'+member.memberid}>Add Task</button>
-                                    <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.removeMember(member.memberid,member.project_id)}}> Remove member </button>
-                                </div>
-                                <div className='my-3' style={{display: this.state.taskDisplay}} id={member.memberid}>
-                                    <p>Add task</p>
-                                    <input className='form-control' onChange={(event)=>{this.taskInput(event)}} onKeyDown={(event)=>{this.taskInput(event)}} placeholder='Add your task' value={this.state.task}/>
-                                </div>
+                <div className='card m-3' style={{width: '400px'}}>
+                    <div className='card-header'>
+                        <div>
+                            <h6>
+                                {member.member_name}
+                            </h6>
+                            <div className='row justify-content-around'>
+                                <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.taskShowInput(member.memberid, member.project_id)}} id={'btn'+member.memberid}>Add Task</button>
+                                <button className='btn btn-sm' onClick={(memberId,projectId)=>{this.removeMember(member.memberid,member.project_id)}}> Remove member </button>
+                            </div>
+                            <div className='my-3' style={{display: this.state.taskDisplay}} id={'addTaskDiv'+member.memberid}>
+                                <p>Add task</p>
+                                <input className='form-control' onChange={(event)=>{this.taskInput(event)}} onKeyDown={(event)=>{this.taskInput(event)}} placeholder='Add your task' value={this.state.task}/>
                             </div>
                         </div>
-                        {mapTasks}
                     </div>
+                    {mapTasks}
                 </div>
             )
         })
 
         return(
 
-            <div className='row'>
+            <div className={styles.containerbody}>
                 <div className='col-3'>
                     <div className='card'>
                         <div className='card-header mb-3 bg-light'>
-                            <div className='row'>
+                            <div className='row align-top'>
                                 <div className='col-6 text-primary'>
                                     <h3>Projects</h3>
                                 </div>
                                 <div className='col-6 text-right'>
-                                    <button className='btn btn-sm btn-outline-danger'onClick={()=>{this.projectDisplay()}}>Sign out</button>
+                                    <i className='bx bx-log-out' style={{fontSize:'20px'}}onClick={()=>{this.projectDisplay()}} id={styles.signout}>Sign out</i>
                                 </div>
                             </div>
                         </div>
-                        <button className='btn btn-sm btn-outline-primary mb-3' onClick={()=>{this.showAddProject()}}>{this.state.addProjectBtn}</button>
-                        <div className='card-body mb-3 bg-light'>
-                            <div className='form-group' style={{display:'none'}}id='addProject'>
+                        <i className={'bx bx-'+this.state.addProjectIcon+' mb-3'} onClick={()=>{this.showAddProject()}} style={{fontSize:'20px'}} id={styles.newp}>{this.state.addProjectBtn}</i>
+                        <div className='card-body mb-3 text-dark' style={{display:'none'}}id='addProject'>
+                            <div className='form-group'>
                                 <p>Project Name:</p>
-                                <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName}/>
+                                <input className='form-control' onChange={(event)=>{this.projectName(event)}} onKeyDown={(event)=>{this.projectName(event)}} value={this.state.projectName} placeholder='Project Name'/>
                                 <p>Project Description: </p>
-                                <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription}/>
-                                <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
+                                <input className='form-control' onChange={(event)=>{this.projectDescription(event)}} onKeyDown={(event)=>{this.projectDescription(event)}} value={this.state.projectDescription} placeholder='Project Description'/>
+                                <br/>
+                                <div className='text-right'>
+                                    <button className='btn btn-sm btn-outline-success mt-2' onClick={()=>{this.addNewProject()}}>Create</button>
+                                </div>
                             </div>
                         </div>
                         <div className='card-footer'>
@@ -443,11 +482,13 @@ class Project extends React.Component{
                     </div>
                 </div>
                 <div className='col-9'>
-                    <div className='card-header mb-3'>
-                        {projectName}
-                    </div>
-                    <div className='row' style={{display: ''}} id={this.state.showProjectId}>
-                        {mapMembers}
+                    <div className='card sticky-top' style={{display: 'none'}} id={this.state.showProjectId}>
+                        <div className='card-header mb-3 text-primary'>
+                            {projectName}
+                        </div>
+                        <div className='card-body d-flex flex-row justify-content-around '>
+                            {mapMembers}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,41 @@
+.containerbody{
+	display: flex;
+	flex-direction: row;
+}
+
+#pDesc{
+	&:hover{
+		color:red;
+		cursor:pointer;
+	}
+}
+
+#pencil{
+	&:hover{
+		cursor:pointer;
+	}
+}
+
+#close{
+	&:hover{
+		cursor:pointer;
+	}
+}
+
+#addMember{
+	&:hover{
+		cursor:pointer;
+	}
+}
+
+#signout{
+	&:hover{
+		cursor:pointer;
+	}
+}
+
+#newp{
+	&:hover{
+		cursor:pointer;
+	}
+}
