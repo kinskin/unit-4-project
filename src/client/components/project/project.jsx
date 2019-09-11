@@ -448,10 +448,10 @@ class Project extends React.Component{
                     <div className='card'>
                         <div className='card-header mb-3 bg-light'>
                             <div className='row align-top'>
-                                <div className='col-6 text-primary'>
+                                <div className='col-7 text-primary'>
                                     <h3>Projects</h3>
                                 </div>
-                                <div className='col-6 text-right'>
+                                <div className='col-5 text-right'>
                                     <i className='bx bx-log-out' style={{fontSize:'20px'}}onClick={()=>{this.projectDisplay()}} id={styles.signout}>Sign out</i>
                                 </div>
                             </div>
