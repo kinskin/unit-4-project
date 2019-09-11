@@ -27,7 +27,7 @@ class App extends React.Component {
 
     componentDidMount(){
 
-        let url = `http://localhost:3000/projects`
+        let url = `/projects`
         fetch(url)
             .then(response =>  response.json())
             .then(data => {
