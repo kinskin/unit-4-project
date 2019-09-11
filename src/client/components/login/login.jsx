@@ -111,7 +111,7 @@ class Login extends React.Component{
                                     <button className = 'btn btn-sm btn-outline-primary' onClick={()=>{this.showSignup()}}> Sign up </button>
                                 </div>
                                 <div className='col-6'>
-                                    <button className='btn btn-sm btn-outline-success' onClick={()=>{this.signInCheck()}}> Sign in </button>
+                                    <i class='bx bx-log-in' style={{fontSize:'20px', color:'green'}}onClick={()=>{this.signInCheck()}}> Sign in</i>
                                 </div>
                             </div>
                         </div>

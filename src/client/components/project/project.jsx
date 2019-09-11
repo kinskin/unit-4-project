@@ -43,7 +43,6 @@ class Project extends React.Component{
         .then(res => res.json())
         .then(res => {
             this.props.projectDisplay(display)
-            console.log(res)
         })
     }
 
@@ -438,7 +437,9 @@ class Project extends React.Component{
                             </div>
                         </div>
                     </div>
-                    {mapTasks}
+                    <div style={{height: '20rem', overflowY:'scroll'}}>
+                        {mapTasks}
+                    </div>
                 </div>
             )
         })
@@ -471,18 +472,22 @@ class Project extends React.Component{
                                 </div>
                             </div>
                         </div>
-                        <div className='card-footer'>
+                        <div className='card-footer' style={{height: '30rem', overflowY:'scroll'}}>
                             {mapProject}
                         </div>
                     </div>
                 </div>
                 <div className='col-9'>
-                    <div className='card sticky-top' style={{display: 'none'}} id={this.state.showProjectId}>
-                        <div className='card-header mb-3 text-primary'>
-                            {projectName}
+                    <div className='sticky-top' style={{display: 'none'}} id={this.state.showProjectId}>
+                        <div className='row'>
+                            <div className='card-header bg-light mb-3 text-primary w-100'>
+                                {projectName}
+                            </div>
                         </div>
-                        <div className='card-body d-flex flex-row justify-content-around '>
-                            {mapMembers}
+                        <div className='row overflow-auto'>
+                            <div className='d-flex flex-row'>
+                                {mapMembers}
+                            </div>
                         </div>
                     </div>
                 </div>

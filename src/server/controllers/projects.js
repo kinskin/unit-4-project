@@ -70,8 +70,6 @@ module.exports = (db) => {
 
 
     let newMember = (request, response) => {
-        console.log(request.body.memberName)
-        console.log(request.body.projectId)
         db.projects.newMember(request.body.memberName, request.body.projectId, (error,result)=>{
             if(error){
                 console.log('error in adding the new member')
@@ -83,9 +81,6 @@ module.exports = (db) => {
     }
 
     let newTask = (request,response)=>{
-        console.log(request.body.task)
-        console.log(request.body.memberId)
-        console.log(request.body.taskProjectId)
         db.projects.newTask(request.body.task, request.body.memberId, request.body.taskProjectId,(error,result)=>{
             if(error){
                 console.log('error in adding the new task')
@@ -176,9 +171,6 @@ module.exports = (db) => {
             }
             else{
                 if(result.length > 0){
-                    console.log('this is the result of the query id: ', result[0].userid)
-                    console.log('this is the result of the query email: ', result[0].email)
-                    console.log('this is the result of the query password: ', result[0].password)
                     let userId = result[0].userid
                     response.cookie('loggedIn', true)
                     response.cookie('user_id', userId)
