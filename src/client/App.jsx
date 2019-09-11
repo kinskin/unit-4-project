@@ -180,7 +180,7 @@ class App extends React.Component {
     return (
         <div className='container-fluid'>
             <nav className={styles.navbar}>
-                <p>Trello on Clicks</p>
+                <p>Click-Board</p>
             </nav>
             {showProject}
         </div>

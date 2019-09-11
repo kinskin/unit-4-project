@@ -385,9 +385,6 @@ class Project extends React.Component{
                             </div>
                         </div>
                     </div>
-                    <div className='card-footer'>
-                        <button>Delete Project</button>
-                    </div>
                 </div>
             )
         })
@@ -437,7 +434,7 @@ class Project extends React.Component{
                             </div>
                         </div>
                     </div>
-                    <div style={{height: '20rem', overflowY:'scroll'}}>
+                    <div style={{height: '20rem', overflowY:'scroll', width: '24rem'}}>
                         {mapTasks}
                     </div>
                 </div>
