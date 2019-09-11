@@ -161,7 +161,7 @@ class App extends React.Component {
         let user_id = cookie[indexNum]
 
         if (loggedInCookie.includes('true')) {
-            this.showUserProject(user_id)
+            this.showUserProject(userId)
         }
     }
 
