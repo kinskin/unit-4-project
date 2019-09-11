@@ -56,18 +56,15 @@ class Login extends React.Component{
             this.setState({newEmail: '', newPassword: ''})
             signInDiv.style.display = ''
             signUpDiv.style.display = 'none'
-            console.log(res)
         })
     }
 
     signInEmail(event){
         this.setState({signInEmail: event.target.value})
-        console.log(event.target.value)
     }
 
     signInPassword(event){
         this.setState({signInPassword: event.target.value})
-        console.log(event.target.value)
     }
 
     signInCheck(){
