@@ -37,7 +37,6 @@ module.exports = {
    */
   projects: projects(pool),
 
-
   //make queries directly from here
   queryInterface: (text, params, callback) => {
     return pool.query(text, params, callback);
