@@ -1,7 +1,10 @@
 module.exports = (app, db) => {
   const projects = require('./controllers/projects')(db);
+  const lings = require('./controllers/lings')(db);
 
 
+
+  app.get('/lingdata', lings.data)
   app.post('/logout', projects.userSignOut)
   app.post('/user/signin', projects.userSignIn)
   app.post('/new/user', projects.newUser)
